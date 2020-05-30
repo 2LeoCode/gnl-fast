@@ -6,7 +6,7 @@
 /*   By: lsuardi <lsuardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/28 17:21:53 by lsuardi           #+#    #+#             */
-/*   Updated: 2020/05/29 19:18:33 by lsuardi          ###   ########.fr       */
+/*   Updated: 2020/05/30 15:37:58 by lsuardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,16 @@ int		update_buffer(char **line, char **left, char *lst_line)
 			free(*left);
 		return (line ? 0 : -1);
 	}
-	if (!(tmp = ft_strdup(*left)))
-	{
-		free(*left);
-		return (-1);
-	}
+	tmp = ft_strdup(*left);
 	free(*left);
+	if (!tmp)
+		return (-1);
 	tmp2 = ft_strchr(tmp, '\n');
 	*left = *(tmp2 + 1) ? ft_strdup(tmp2 + 1) : NULL;
 	*tmp2 = 0;
 	if (!(*line = ft_strdup(tmp)))
-		free(left);
+		free(*left);
+	free(tmp);
 	return (line ? 1 : -1);
 }
 
@@ -127,6 +126,7 @@ int			get_next_line(int fd, char **line)
 		return (ft_lstclear(&buffer.lstbuf) - 1);
 	if (buffer.line)
 		free(buffer.line);
+	buffer.line = NULL;
 	buffer.origin = buffer.lstbuf;
 	while (buffer.lstbuf)
 	{
