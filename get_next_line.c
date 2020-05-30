@@ -6,13 +6,13 @@
 /*   By: lsuardi <lsuardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/28 17:21:53 by lsuardi           #+#    #+#             */
-/*   Updated: 2020/05/30 15:37:58 by lsuardi          ###   ########.fr       */
+/*   Updated: 2020/05/30 16:09:35 by lsuardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		update_buffer(char **line, char **left, char *lst_line)
+static int		update_buffer(char **line, char **left, char *lst_line)
 {
 	char	*tmp;
 	char	*tmp2;
@@ -37,7 +37,7 @@ int		update_buffer(char **line, char **left, char *lst_line)
 	return (line ? 1 : -1);
 }
 
-char	*get_whats_left(t_list *lstbuf)
+static char		*get_whats_left(t_list *lstbuf)
 {
 	char	*tmp;
 	int		i;
@@ -57,7 +57,7 @@ char	*get_whats_left(t_list *lstbuf)
 	return (ft_strdup(""));
 }
 
-t_list		*read_to_list(int fd)
+static t_list	*read_to_list(int fd)
 {
 	t_list	*begin;
 	t_list	*tmp;
@@ -84,7 +84,7 @@ t_list		*read_to_list(int fd)
 	return (begin);
 }
 
-char		*get_line_from_list(t_list *lstbuf)
+static char		*get_line_from_list(t_list *lstbuf)
 {
 	t_list	*tmp;
 	char	*line;
@@ -98,7 +98,7 @@ char		*get_line_from_list(t_list *lstbuf)
 		ft_lstclear(&tmp);
 		return (NULL);
 	}
-	while(tmp)
+	while (tmp)
 	{
 		i = 0;
 		while (tmp->buf[i] && (tmp->buf[i++] - '\n'))
@@ -109,7 +109,7 @@ char		*get_line_from_list(t_list *lstbuf)
 	return (line - len);
 }
 
-int			get_next_line(int fd, char **line)
+int				get_next_line(int fd, char **line)
 {
 	t_buffer		buffer;
 	static char		*left[MAX_FD];
@@ -120,13 +120,10 @@ int			get_next_line(int fd, char **line)
 	if (BUFFER_SIZE < 1 || (((left[fd] && !ft_strchr(left[fd], '\n'))
 	|| !left[fd]) && (!(buffer.lstbuf = read_to_list(fd))
 	|| !(buffer.line = get_line_from_list(buffer.lstbuf))))
-	|| ((ret = update_buffer(line, &left[fd], buffer.line)) < 0)
-	|| !*line
+	|| ((ret = update_buffer(line, &left[fd], buffer.line)) < 0) || !*line
 	|| (buffer.lstbuf && !(left[fd] = get_whats_left(buffer.lstbuf))))
 		return (ft_lstclear(&buffer.lstbuf) - 1);
-	if (buffer.line)
-		free(buffer.line);
-	buffer.line = NULL;
+	free(buffer.line);
 	buffer.origin = buffer.lstbuf;
 	while (buffer.lstbuf)
 	{

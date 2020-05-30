@@ -6,7 +6,7 @@
 /*   By: lsuardi <lsuardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/28 17:56:37 by lsuardi           #+#    #+#             */
-/*   Updated: 2020/05/29 02:09:09 by lsuardi          ###   ########.fr       */
+/*   Updated: 2020/05/30 16:01:29 by lsuardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ char	*ft_strchr(const char *s, int c)
 	return ((char*)s);
 }
 
-size_t		line_size(t_list *lstbuf)
+size_t	line_size(t_list *lstbuf)
 {
 	size_t	len;
 	int		i;
 
 	len = 0;
-	while(lstbuf)
+	while (lstbuf)
 	{
 		i = 0;
 		while (lstbuf->buf[i] && (lstbuf->buf[i++] - '\n'))
